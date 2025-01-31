@@ -26,10 +26,15 @@ final class RecipeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $recipe = new Recipe();
-        $form = $this->createForm(RecipeType::class, $recipe);
-        $form->handleRequest($request);
+        $recipeForm = $this->createForm(RecipeType::class, $recipe);
+        $recipeForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($recipeForm->isSubmitted() && $recipeForm->isValid()) {
+
+            if ($this->getUser()) {
+                $recipe->setUser($this->getUser());
+            }
+
             $entityManager->persist($recipe);
             $entityManager->flush();
 
@@ -38,7 +43,7 @@ final class RecipeController extends AbstractController
 
         return $this->render('recipe/new.html.twig', [
             'recipe' => $recipe,
-            'form' => $form,
+            'recipeForm' => $recipeForm,
         ]);
     }
 
@@ -53,10 +58,15 @@ final class RecipeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_recipe_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Recipe $recipe, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(RecipeType::class, $recipe);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->getUser() !== $recipe->getUser()) {
+            return $this->redirectToRoute('app_recipe_index');
+        } 
+
+        $recipeForm = $this->createForm(RecipeType::class, $recipe);
+        $recipeForm->handleRequest($request);
+
+        if ($recipeForm->isSubmitted() && $recipeForm->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_recipe_index', [], Response::HTTP_SEE_OTHER);
@@ -64,7 +74,7 @@ final class RecipeController extends AbstractController
 
         return $this->render('recipe/edit.html.twig', [
             'recipe' => $recipe,
-            'form' => $form,
+            'recipeForm' => $recipeForm,
         ]);
     }
 
