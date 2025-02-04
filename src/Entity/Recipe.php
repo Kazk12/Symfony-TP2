@@ -36,12 +36,21 @@ class Recipe
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'The description cannot be blank.')]
+    #[Assert\NotNull(message: 'The description cannot be null.')]
+    #[Assert\Length(min: 3)]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'The duration cannot be blank.')]
+    #[Assert\NotNull(message: 'The duration cannot be null.')]
+    #[Assert\Positive(message: 'The duration must be a positive number.')]
     private ?int $duration = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'The slug cannot be blank.')]
+    #[Assert\NotNull(message: 'The slug cannot be null.')]
+    #[Assert\Length(min: 5, max: 150)]
     private ?string $slug = null;
 
     #[ORM\Column]

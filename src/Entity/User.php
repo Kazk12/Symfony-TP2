@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -21,6 +23,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: 'The email cannot be blank.')]
+    #[Assert\NotNull(message: 'The email cannot be null.')]
+    #[Assert\Email(message: 'The email is not a valid email.')]
+    #[Assert\Type(Address::class)]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",
+        message: "The email is not a valid email address."
+    )]
     private ?string $email = null;
 
     /**
@@ -33,9 +43,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'The password cannot be blank.')]
+    #[Assert\NotNull(message: 'The password cannot be null.')]
+    #[Assert\Length(min: 8)]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'The pseudo cannot be blank.')]
+    #[Assert\NotNull(message: 'The pseudo cannot be null.')]
+    #[Assert\Length(min: 5, max: 150)]
+    #[Assert\Type('string')]
     private ?string $pseudo = null;
 
     /**
