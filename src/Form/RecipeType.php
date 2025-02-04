@@ -3,14 +3,17 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class RecipeType extends AbstractType
 {
@@ -28,6 +31,14 @@ class RecipeType extends AbstractType
             ]
         ])
 
+        ->add('ingredients',EntityType::class, [
+            'class'=>Ingredient::class,
+'attr'=>['class'=>'form-control'],
+'label'=>'ingredients de la recette',
+'label_attr'=>['class'=>'input-label'],
+'multiple' => true,
+'expanded' => true
+        ])
      
        
        
@@ -41,7 +52,7 @@ class RecipeType extends AbstractType
             ]
         ])
         
-
+        ->add('thumbnailFile', FileType::class)
 
         ->add('description', TextType::class, [
             'attr' => [

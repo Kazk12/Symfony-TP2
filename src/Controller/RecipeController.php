@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/recipe')]
 final class RecipeController extends AbstractController
@@ -30,6 +32,10 @@ final class RecipeController extends AbstractController
         $recipeForm->handleRequest($request);
 
         if ($recipeForm->isSubmitted() && $recipeForm->isValid()) {
+
+            foreach ($recipeForm->get('ingredients')->getData() as $ingredient) {
+                $recipe->addIngredient($ingredient);
+            }
 
             if ($this->getUser()) {
                 $recipe->setUser($this->getUser());
@@ -56,8 +62,10 @@ final class RecipeController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_recipe_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Recipe $recipe, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Recipe $recipe, EntityManagerInterface $entityManager, UploaderHelper $helper): Response
     {
+
+        // dd($helper->asset($recipe, 'thumbnailFile'));
 
         if ($this->getUser() !== $recipe->getUser()) {
             return $this->redirectToRoute('app_recipe_index');
@@ -67,6 +75,11 @@ final class RecipeController extends AbstractController
         $recipeForm->handleRequest($request);
 
         if ($recipeForm->isSubmitted() && $recipeForm->isValid()) {
+
+            foreach ($recipeForm->get('ingredients')->getData() as $ingredient) {
+                $recipe->addIngredient($ingredient);
+            }
+            
             $entityManager->flush();
 
             return $this->redirectToRoute('app_recipe_index', [], Response::HTTP_SEE_OTHER);

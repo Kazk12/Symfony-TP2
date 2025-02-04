@@ -1,41 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        
         {% block stylesheets %}
-         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-gray-100">
 
-   <header class="bg-gray-800 p-4">
-    <nav class="flex justify-between items-center">
-        <!-- Logo ou titre à gauche -->
-        <div class="text-white text-2xl font-semibold">
-            <a href="/" class="hover:text-gray-300">MaCuisine</a>
-        </div>
+        <!-- HEADER -->
+        <header class="bg-gray-800 p-4 shadow-lg">
+            <nav class="max-w-7xl mx-auto flex justify-between items-center">
+                <!-- Logo/Titre à gauche -->
+                <div class="text-white text-2xl font-extrabold">
+                    <a href="/" class="hover:text-gray-300 transition duration-200">MaCuisine</a>
+                </div>
 
-        <!-- Navigation des liens à droite -->
-        <div class="space-x-6 flex items-center">
-            <a href="#" class="text-white hover:text-gray-300 text-lg">Voir toutes les recettes</a>
-            
-            {% if app.user %}
-                <p class="text-white text-lg">Salut {{ app.user.pseudo }}</p>
-                <a href="{{ path('app_logout') }}" class="text-white hover:text-gray-300 text-lg">Deconnexion</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="text-white hover:text-gray-300 text-lg">Connexion</a>
-                <a href="{{ path('app_register') }}" class="text-white hover:text-gray-300 text-lg">Inscription</a>
-            {% endif %}
-        </div>
-    </nav>
-</header>
+                <!-- Navigation des liens à droite -->
+                <div class="space-x-6 flex items-center">
+                    <a href="{{ path('app_recipe_index') }}" class="text-white hover:text-gray-300 text-lg transition duration-200">Voir toutes les recettes</a>
+                    
+                    {% if app.user %}
+                        <p class="text-white text-lg">Salut {{ app.user.pseudo }}</p>
+                        <a href="{{ path('app_logout') }}" class="text-white hover:text-gray-300 text-lg transition duration-200">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="text-white hover:text-gray-300 text-lg transition duration-200">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="text-white hover:text-gray-300 text-lg transition duration-200">Inscription</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
 
         {% block body %}{% endblock %}
+        
     </body>
 </html>

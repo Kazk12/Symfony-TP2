@@ -29,6 +29,31 @@
         {{ form_errors(recipeForm.category, {'attr': {'class': 'text-sm text-red-500 mt-1'}}) }}
     </div>
 
+     <!-- image -->
+    <div class="mb-4">
+        {{ form_label(recipeForm.thumbnailFile, 'Choix de l\'image :', {'label_attr': {'class': 'block text-lg font-medium text-gray-700'}}) }}
+            {% if recipeForm.thumbnailFile.vars.value is not empty %}
+            <!-- Si l'image existe, afficher l'image avec un <img> -->
+            <img src="./recettes/images/{{ recipe.thumbnail }}" alt="Image de la recette" class="w-full h-auto mb-2 rounded-md"/>
+            {% endif %}
+        <div class="mt-2">
+            {{ form_widget(recipeForm.thumbnailFile, {'attr': {'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'}}) }}
+        </div>
+        {{ form_errors(recipeForm.thumbnailFile, {'attr': {'class': 'text-sm text-red-500 mt-1'}}) }}
+    </div>
+
+      
+    <div class="mb-4">
+    {{ form_label(recipeForm.ingredients, 'Choix des ingrédients :', {'label_attr': {'class': 'block text-lg font-medium text-gray-700'}}) }}
+        <div class="mt-2 ">
+            {{ form_widget(recipeForm.ingredients, {'attr': {'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent flex flex-row gap-4'}}) }}
+        </div>
+        {{ form_errors(recipeForm.ingredients, {'attr': {'class': 'text-sm text-red-500 mt-1'}}) }}
+    
+    </div>
+
+    
+
     <!-- Slug -->
     <div class="mb-4">
         {{ form_label(recipeForm.slug, 'Slug de la recette :', {'label_attr': {'class': 'block text-lg font-medium text-gray-700'}}) }}

@@ -26,7 +26,7 @@
 
         <!-- Image de la recette -->
         <div class="mb-8">
-            <img class="w-full rounded-lg shadow-md" src="{{ asset('images/recipe-placeholder.jpg') }}" alt="Image de la recette">
+            <img class="w-full rounded-lg shadow-md" src="{{ vich_uploader_asset(recipe, 'thumbnailFile')  }}" alt="Image de la recette">
         </div>
 
         <!-- Description de la recette -->
@@ -39,11 +39,18 @@
         <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Détails supplémentaires</h2>
             <div class="space-y-4">
-                <div class="flex justify-between">
+                <div class="flex gap-4">
                     <span class="text-gray-600 font-semibold">Slug :</span>
                     <span class="text-gray-700">{{ recipe.slug }}</span>
                 </div>
-                <div class="flex justify-between">
+                 <div class="flex gap-4">
+                    <span class="text-gray-600 font-semibold">Ingredients :</span>
+                    {% for ingredient in recipe.ingredients %}
+                        <span class="text-gray-700">{{ ingredient }}</span>
+                    {% endfor %}
+                    
+                </div>
+                <div class="flex gap-4">
                     <span class="text-gray-600 font-semibold">Créée le :</span>
                     <span class="text-gray-700">{{ recipe.createdAt ? recipe.createdAt|date('Y-m-d H:i:s') : '' }}</span>
                 </div>
